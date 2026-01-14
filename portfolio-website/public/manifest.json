@@ -1,0 +1,17 @@
+{
+  "name": "Arbab Arshad Portfolio",
+  "short_name": "ArbabArshad",
+  "theme_color": "#0A0A0A",
+  "background_color": "#0A0A0A",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "description": "Luxury-grade portfolio for Arbab Arshad, Full-Stack MERN Developer and Data Analyst.",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

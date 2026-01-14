@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(120% 120% at 12% 8%, rgba(59, 130, 246, 0.16), transparent 38%),
+    radial-gradient(140% 140% at 88% -10%, rgba(212, 175, 55, 0.22), transparent 42%),
+    radial-gradient(120% 120% at 70% 30%, rgba(124, 58, 237, 0.14), transparent 46%),
+    linear-gradient(145deg, #07070c 0%, #0c0f1a 32%, #0b0b10 64%, #050608 100%);
+  color: #f5f5f5;
+}
+
+body.light {
+  color-scheme: light;
+  background:
+    radial-gradient(120% 120% at 14% 12%, rgba(37, 99, 235, 0.16), transparent 36%),
+    radial-gradient(110% 110% at 86% -6%, rgba(212, 175, 55, 0.22), transparent 40%),
+    radial-gradient(120% 120% at 70% 30%, rgba(124, 58, 237, 0.14), transparent 42%),
+    linear-gradient(135deg, #fefbf6 0%, #f2f6ff 45%, #ffffff 100%),
+    linear-gradient(120deg, rgba(37, 99, 235, 0.08) 0%, rgba(255, 255, 255, 0) 40%),
+    linear-gradient(300deg, rgba(184, 134, 11, 0.06) 0%, rgba(255, 255, 255, 0) 45%);
+  color: #0a0a0a;
+}
+
+.admin-hero-overlay {
+  opacity: 0.8;
+  background: radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12), transparent 40%),
+    radial-gradient(circle at 82% 10%, rgba(212, 175, 55, 0.18), transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.12), transparent 50%);
+}
+
+@media (max-width: 768px) {
+  .admin-hero-overlay {
+    opacity: 0.75;
+    background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 38%),
+      radial-gradient(circle at 80% 12%, rgba(212, 175, 55, 0.16), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.1), transparent 46%);
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card-surface {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.light .card-surface {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.85));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Global light-mode overrides to ensure full palette swap */
+body.light .text-white {
+  color: #0b0f19 !important;
+}
+
+body.light .text-gray-100 {
+  color: #111827 !important;
+}
+
+body.light .text-gray-200 {
+  color: #1f2937 !important;
+}
+
+body.light .text-gray-300 {
+  color: #374151 !important;
+}
+
+body.light .text-gray-400 {
+  color: #4b5563 !important;
+}
+
+body.light .border-white\/5,
+body.light .border-white\/10,
+body.light .border-white\/15,
+body.light [class*="border-white/"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light .bg-night,
+body.light .bg-night-100,
+body.light .bg-night-200,
+body.light [class*="bg-night"] {
+  background-color: #f7f9fc !important;
+}
+
+body.light .bg-black\/60,
+body.light [class*="bg-black/"] {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.light .bg-white\/5,
+body.light .bg-white\/10,
+body.light [class*="bg-white/5"],
+body.light [class*="bg-white/10"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light .text-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #b8860b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 35%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.fade-border {
+  position: relative;
+}
+
+.fade-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.5), rgba(212, 175, 55, 0.8));
+  opacity: 0.35;
+  filter: blur(12px);
+  border-radius: inherit;
+}
+
+.section {
+  padding: 3rem 1.25rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width=\"200\" height=\"200\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"4\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.05\"/></svg>');
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+.light .noise {
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+}
+
+/* Subtle grid overlay for a modern feel */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.35;
+}
+
+.light .grid-overlay {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  opacity: 0.22;
+}
+
+.admin-grid-overlay {
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: linear-gradient(120deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 120px 120px;
+}
+
+.dark .admin-grid-overlay {
+  background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 110px 110px;
+}
+
+@media (min-width: 640px) {
+  .admin-grid-overlay {
+    background-size: 150px 150px;
+  }
+  .dark .admin-grid-overlay {
+    background-size: 130px 130px;
+  }
+}
+
+.light-bloom {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 40% at 15% 15%, rgba(59, 130, 246, 0.14), transparent 55%),
+    radial-gradient(35% 35% at 85% 10%, rgba(212, 175, 55, 0.16), transparent 55%),
+    radial-gradient(50% 50% at 70% 60%, rgba(124, 58, 237, 0.12), transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.light .light-bloom {
+  opacity: 0.7;
+}
+
+.dark .light-bloom {
+  opacity: 0;
+}

@@ -1,0 +1,40 @@
+export const settings = {
+  id: "site-config",
+  personalInfo: {
+    fullName: "Arbab Arshad",
+    title: "Full-Stack MERN Developer · Data Analyst",
+    tagline: "Building scalable solutions with modern web technologies",
+    bio: "Passionate full-stack developer specializing in MERN stack and data analytics. Currently pursuing B.Tech at IIIT Bhagalpur, building scalable web applications and creating data-driven solutions. Committed to writing clean, maintainable code and delivering exceptional user experiences.",
+    email: "arbabprvt@gmail.com",
+    phone: "+91 7367084034",
+    location: "Patna, Bihar, India",
+    profileImage: "",
+    resumeUrl: "",
+    resumeVersion: "v1.0",
+    resumeUpdatedAt: new Date().toISOString(),
+  },
+  socialLinks: {
+    linkedin: "",
+    github: "",
+    twitter: "",
+    email: "mailto:arbabprvt@gmail.com",
+  },
+  seo: {
+    siteName: "Arbab Arshad - Portfolio",
+    siteDescription: "Full-Stack MERN Developer · Data Analyst",
+    keywords: ["Full Stack Developer", "MERN", "Data Analyst", "Arbab Arshad"],
+    ogImage: "",
+  },
+  features: {
+    chatEnabled: true,
+    blogEnabled: true,
+    projectLikesEnabled: true,
+  },
+  experienceSummary: {
+    years: 0,
+    months: 0,
+    label: "Experience",
+  },
+  adminEmail: "arbabprvt@gmail.com",
+  maintenanceMode: false,
+};

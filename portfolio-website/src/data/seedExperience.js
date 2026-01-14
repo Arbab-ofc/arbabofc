@@ -1,0 +1,46 @@
+export const experiences = [
+  {
+    company: "Unified Mentor",
+    position: "Full Stack Web Developer Intern",
+    duration: "Oct 1, 2025 – Jan 1, 2026",
+    location: "Remote",
+    type: "Internship",
+    current: true,
+    description: "Developed multiple full-stack web applications focusing on security, role-based access, and real-time features",
+    achievements: [
+      "Project 1: Secure sharing of government documents within family members with role-based access",
+      "Project 2: Student–Teacher appointment booking portal for scheduling and management",
+      "Project 3: Catering reservation & ordering system for menu selection, orders, and reservations",
+      "Project 4: Hospital operations scheduler to plan and coordinate operational tasks",
+    ],
+    technologies: ["React", "Node.js", "Express.js", "MongoDB", "JWT", "Role-Based Access Control"],
+  },
+  {
+    company: "CodSoft",
+    position: "Web Developer Intern",
+    duration: "Sep 25, 2025 – Oct 25, 2025",
+    location: "Remote",
+    type: "Internship",
+    current: false,
+    description: "Built project management and e-commerce platforms with modern web technologies",
+    achievements: [
+      "Project management website for task tracking, assignments, and progress monitoring",
+      "E-commerce website covering product listing, cart, and checkout flows",
+    ],
+    technologies: ["React", "Node.js", "MongoDB", "REST APIs", "State Management"],
+  },
+  {
+    company: "Veridia.io",
+    position: "SDE Intern",
+    duration: "Jul 3, 2025 – Oct 8, 2025",
+    location: "Remote/India",
+    type: "Internship",
+    current: false,
+    description: "Developed secure voting and attendance management systems with focus on data integrity and user authentication",
+    achievements: [
+      "VoteVerse: an online voting platform enforcing one-vote-per-voter-per-election with user security and integrity protections",
+      "AttendX: an online attendance & consistency tracker supporting create/update/delete attendance and automatic consistency % calculation",
+    ],
+    technologies: ["React", "Node.js", "MongoDB", "JWT", "OTP Verification", "Security"],
+  },
+];
