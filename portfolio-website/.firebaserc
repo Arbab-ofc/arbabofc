@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "arbabofc-prvt"
-  }
+    "default": "arbabofc-prvt",
+    "prod": "arbabofc-prvt"
+  },
+  "targets": {},
+  "etags": {}
 }
