@@ -12,9 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+        working-directory: portfolio-website
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ARBABOFC_PRVT }}
           channelId: live
+          entryPoint: portfolio-website
           projectId: arbabofc-prvt
