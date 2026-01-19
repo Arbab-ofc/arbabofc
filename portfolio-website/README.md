@@ -33,3 +33,4 @@ npm run dev
 - Connect chat/messages to Firestore real-time listeners
 - Add analytics and resume storage endpoints
 - Expand admin dashboard panels for each collection
+
