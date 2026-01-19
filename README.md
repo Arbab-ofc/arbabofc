@@ -1,6 +1,6 @@
 # Arbab Arshad Portfolio
 
-Modern, production-ready personal portfolio built with React and Vite. The project combines a design-forward UI system with Firebase-backed features, content scaffolding, and deployment automation to deliver a fast, scalable personal site.
+Premium, performance-focused personal portfolio built with React and Vite. This repository ships a highly polished UI, rich content sections, and Firebase-backed deployment designed for fast iteration and a modern web presence.
 
 ## Live
 
@@ -18,35 +18,36 @@ Modern, production-ready personal portfolio built with React and Vite. The proje
 
 ## Highlights
 
-- Responsive, sectioned layout with hero, about, skills, experience, projects, blog, achievements, and contact
-- Modular data-driven sections designed for quick content changes
-- Form handling with validation for contact and admin flows
-- Animation layer for modern motion and micro-interactions
-- PWA-ready configuration and SEO-friendly meta handling
-- Firebase hosting and GitHub Actions deployment pipeline
+- Complete multi-section layout for hero, about, skills, experience, projects, blog, achievements, and contact
+- Structured data sources for quick content updates without touching layout code
+- Modern UI stack with utility styling, component libraries, and animation
+- PWA-ready build configuration and SEO-friendly metadata
+- Firebase Hosting deployment automated through GitHub Actions
 
-## Project Structure
+## Repository Layout
 
-- `src/components/sections`: Core page sections and layout blocks
-- `src/components/ui`: Shared UI primitives and reusable components
-- `src/contexts`: Theme, auth, data, and chat providers
-- `src/pages`: Route-level pages, detail views, and 404
-- `src/data`: Content sources and structured data
-- `public`: Static assets and SEO files
-- `firebase.json` and `firestore.rules`: Hosting and security rules
+- `portfolio-website`: The Vite app source and build output
+- `.github/workflows`: CI and deploy workflows
 
-## Scripts
+## Local Setup
 
 ```bash
+cd portfolio-website
 npm install
 npm run dev
+```
+
+## Build
+
+```bash
+cd portfolio-website
 npm run build
 npm run preview
 ```
 
 ## Environment
 
-Create a `.env` file to store Firebase and Cloudinary keys. Example:
+Create `portfolio-website/.env` and add keys for Firebase and Cloudinary:
 
 ```bash
 VITE_FIREBASE_API_KEY=your_key
@@ -61,17 +62,11 @@ VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
 
 ## Deployment
 
-The site deploys to Firebase Hosting via GitHub Actions on every push to `main`.
+Firebase Hosting is deployed via GitHub Actions on every push to `main`.
 
 - Workflow: `.github/workflows/firebase-hosting-merge.yml`
 - Build: `npm ci && npm run build`
 - Output: `dist`
-
-## Roadmap
-
-- Complete Firestore CRUD for admin CMS content
-- Expand blog and project detail templates
-- Add analytics and performance monitoring
 
 ## License
 
