@@ -4,7 +4,6 @@ import Hero from "../components/sections/Hero";
 import About from "../components/sections/About";
 import Skills from "../components/sections/Skills";
 import Experience from "../components/sections/Experience";
-import ExperienceRoadmap from "../components/sections/ExperienceRoadmap";
 import StudyRoadmap from "../components/sections/StudyRoadmap";
 import Projects from "../components/sections/Projects";
 import Blog from "../components/sections/Blog";
@@ -21,7 +20,6 @@ const Home = () => (
     <About />
     <Skills />
     <Experience />
-    <ExperienceRoadmap />
     <StudyRoadmap />
     <Projects />
     <Blog />

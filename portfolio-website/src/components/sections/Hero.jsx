@@ -23,6 +23,12 @@ const Hero = () => {
   const personal = settings.personalInfo || {};
   const experience = formatExperienceDisplay(settings.experienceSummary);
   const resumeLink = personal.resumeUrl || resumePdf;
+  const internshipsCount = Number(settings.internshipsCount) || 0;
+  const heroTagline = "Build. Ship. Repeat.";
+  const heroWordVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  };
 
   return (
     <section id="hero" className="section pt-20 md:pt-24">
@@ -34,7 +40,18 @@ const Hero = () => {
               <span className="text-gradient block">{personal.fullName || "Arbab Arshad"}</span>
               <span className="text-gray-200">{personal.title}</span>
             </h1>
-            <p className="text-lg text-gray-300 mt-4 max-w-xl">{personal.tagline}</p>
+            <motion.p
+              className="mt-4 max-w-xl flex flex-wrap gap-x-2 text-lg sm:text-xl font-mono font-semibold tracking-tight text-slate-800 dark:text-white/90"
+              initial="hidden"
+              animate="visible"
+              transition={{ staggerChildren: 0.12 }}
+            >
+              {heroTagline.split(" ").map((word, index) => (
+                <motion.span key={`${word}-${index}`} variants={heroWordVariants} className="inline-block">
+                  {word}
+                </motion.span>
+              ))}
+            </motion.p>
           </motion.div>
           <div className="flex gap-3">
             <Button as="a" href="#projects">
@@ -45,15 +62,15 @@ const Hero = () => {
             </Button>
           </div>
           <div className="grid grid-cols-3 gap-4 text-sm text-gray-300">
-            <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center">
               <p className="text-2xl font-semibold text-white">10+</p>
               <p>Full-stack projects</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-              <p className="text-2xl font-semibold text-white">3</p>
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center">
+              <p className="text-2xl font-semibold text-white">{internshipsCount}</p>
               <p>Internships</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center">
               <p className="text-2xl font-semibold text-white">{experience.value}</p>
               <p className="text-gray-400">{experience.label}</p>
             </div>
@@ -77,28 +94,28 @@ const Hero = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_10%,rgba(37,99,235,0.18),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(212,175,55,0.2),transparent_40%)] dark:bg-[radial-gradient(circle_at_25%_10%,rgba(59,130,246,0.22),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(212,175,55,0.24),transparent_40%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px]" aria-hidden />
           <div className="absolute inset-6 rounded-3xl border border-black/10 dark:border-white/10" aria-hidden />
-          <div className="relative p-8 flex flex-col gap-5 h-full">
-            <div className="flex items-center justify-between">
-              <div>
+          <div className="relative p-6 sm:p-7 lg:p-8 flex flex-col gap-5 h-full">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="pl-3 sm:pl-4 lg:pl-6">
                 <p className="text-[11px] uppercase tracking-[0.25em] text-gray-400">Based in</p>
-                <p className="text-3xl font-semibold text-white leading-tight">{personal.location}</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-white leading-tight">{personal.location}</p>
                 <p className="text-sm text-gray-400 mt-1">Full-Stack MERN · Data Analytics</p>
               </div>
-              <div className="px-3 py-1.5 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm shadow-emerald-200/50 dark:bg-emerald-500/25 dark:border-emerald-300/60 dark:text-emerald-50 dark:shadow-lg dark:shadow-emerald-500/30 dark:backdrop-blur whitespace-nowrap">
+              <div className="px-3 py-1.5 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm shadow-emerald-200/50 dark:bg-emerald-500/25 dark:border-emerald-300/60 dark:text-emerald-50 dark:shadow-lg dark:shadow-emerald-500/30 dark:backdrop-blur whitespace-nowrap self-start lg:self-auto">
                 Open for roles
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between gap-4">
+            <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gray-400">Email</p>
-                <a className="text-white font-semibold block mt-1" href={`mailto:${personal.email}`}>
+                <a className="text-white font-semibold block mt-1 break-all" href={`mailto:${personal.email}`}>
                   {personal.email}
                 </a>
               </div>
-              <div className="text-right">
+              <div className="lg:text-right">
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gray-400">Phone</p>
-                <a className="text-white font-semibold block mt-1" href={`tel:${personal.phone}`}>
+                <a className="text-white font-semibold block mt-1 break-all" href={`tel:${personal.phone}`}>
                   {personal.phone}
                 </a>
               </div>
@@ -111,16 +128,16 @@ const Hero = () => {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 text-xs">
               <motion.a
                 href={resumeLink}
                 download
-                className="rounded-2xl bg-white/5 border border-white/10 p-3 flex items-center gap-3 text-left shadow-lg shadow-emerald-500/15 dark:shadow-emerald-500/25 backdrop-blur transition-transform hover:-translate-y-0.5 hover:border-emerald-200/60 hover:bg-white/10"
+                className="rounded-2xl bg-white/5 border border-white/10 p-3 flex flex-col sm:flex-row flex-wrap items-center gap-3 text-center sm:text-left shadow-lg shadow-emerald-500/15 dark:shadow-emerald-500/25 backdrop-blur transition-transform hover:-translate-y-0.5 hover:border-emerald-200/60 hover:bg-white/10"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <motion.span
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/30 via-blue-500/30 to-emerald-500/30 border border-white/15 text-white shadow-inner shadow-emerald-500/30"
+                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/30 via-blue-500/30 to-emerald-500/30 border border-white/15 text-white shadow-inner shadow-emerald-500/30 shrink-0"
                   animate={{ y: [0, -3, 0] }}
                   transition={{ repeat: Infinity, duration: 1.3, ease: "easeInOut" }}
                 >
@@ -130,11 +147,11 @@ const Hero = () => {
                   <p className="text-sm font-semibold text-white leading-tight">Download CV</p>
                   <p className="text-[11px] text-gray-300 dark:text-emerald-100/90">Latest resume PDF</p>
                 </div>
-                <div className="ml-auto text-[11px] text-emerald-700 dark:text-emerald-100 px-2 py-1 rounded-full bg-emerald-100 border border-emerald-200 dark:bg-emerald-500/15 dark:border-emerald-300/30">
+                <div className="sm:ml-auto self-center sm:self-auto text-[11px] text-emerald-700 dark:text-emerald-100 px-2 py-1 rounded-full bg-emerald-100 border border-emerald-200 dark:bg-emerald-500/15 dark:border-emerald-300/30">
                   PDF
                 </div>
               </motion.a>
-              <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+              <div className="rounded-xl bg-white/5 border border-white/10 p-3 flex flex-col items-center justify-center text-center">
                 <p className="text-lg font-semibold text-white">{experience.value}</p>
                 <p className="text-gray-400">{experience.label}</p>
               </div>

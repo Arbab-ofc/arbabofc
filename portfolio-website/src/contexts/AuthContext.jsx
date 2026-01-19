@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signInAnonymously,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
 import { firebaseApp } from "../services/firebase";
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }) => {
   }, [initialized, user]);
 
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
   const logout = () => signOut(auth);
 
   const adminEmailNormalized = (ADMIN_EMAIL || "").toLowerCase();
@@ -54,6 +56,7 @@ export const AuthProvider = ({ children }) => {
       loading,
       isAdmin: !!user && userEmailNormalized === adminEmailNormalized,
       login,
+      resetPassword,
       logout,
     }),
     [user, loading, userEmailNormalized, adminEmailNormalized]

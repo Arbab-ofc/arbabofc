@@ -13,6 +13,11 @@ const makeMeta = (meta) => {
   }
 };
 
+const now = () => {
+  if (typeof performance !== "undefined" && performance.now) return performance.now();
+  return Date.now();
+};
+
 export const logEvent = async (level = "info", message = "", meta) => {
   const payload = {
     level,
@@ -40,3 +45,18 @@ export const logEvent = async (level = "info", message = "", meta) => {
 
 export const logError = (message, meta) => logEvent("error", message, meta);
 export const logInfo = (message, meta) => logEvent("info", message, meta);
+
+// Simple span/timer helper
+export const createSpan = (label, meta) => {
+  const start = now();
+  return {
+    end: (extra) => logInfo(label, { ...(meta || {}), ...(extra || {}), durationMs: Number((now() - start).toFixed(2)) }),
+    error: (err, extra) =>
+      logError(label, {
+        ...(meta || {}),
+        ...(extra || {}),
+        durationMs: Number((now() - start).toFixed(2)),
+        error: err?.message || err,
+      }),
+  };
+};

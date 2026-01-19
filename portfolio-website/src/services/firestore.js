@@ -13,6 +13,7 @@ import {
   runTransaction,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { slugify } from "../utils/helpers";
@@ -128,6 +129,21 @@ export const fetchBlogs = async () => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const fetchExperiences = async () => {
+  const snapshot = await getDocs(collection(db, "experiences"));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const fetchEducationEntries = async () => {
+  const snapshot = await getDocs(collection(db, "education"));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const fetchAchievements = async () => {
+  const snapshot = await getDocs(collection(db, "achievements"));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
 export const saveContactMessage = async (payload) => {
   if (!payload?.email || !payload?.message) return;
   const now = serverTimestamp();
@@ -135,13 +151,22 @@ export const saveContactMessage = async (payload) => {
     ...payload,
     createdAt: now,
     updatedAt: now,
+    deletedAt: null,
   });
 };
 
 export const fetchContactMessages = async () => {
   const q = query(collection(db, "contactMessages"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((msg) => !msg.deletedAt);
+};
+
+export const softDeleteContactMessage = async (id) => {
+  if (!id) return;
+  const ref = doc(db, "contactMessages", id);
+  await updateDoc(ref, { deletedAt: serverTimestamp(), updatedAt: serverTimestamp() });
 };
 
 export const fetchStudyRoadmap = async () => {
@@ -284,6 +309,9 @@ export const syncSeedStudyRoadmap = async (items) =>
 export const syncSeedSkills = async (items) =>
   seedDocs("skills", items, (item) => slugify(`${item.category || "skill"}-${item.name || item}`));
 
+export const syncSeedAchievements = async (items) =>
+  seedDocs("achievements", items, (item) => item.id || slugify(item.title));
+
 export const syncSeedSettings = async (item) => {
   if (!item) return;
   const ref = doc(db, "settings", item.id || "site-config");
@@ -339,6 +367,27 @@ export const deleteProjectRemote = async (slug) => {
   await deleteDoc(ref);
 };
 
+export const upsertAchievementRemote = async (achievement) => {
+  if (!achievement?.title) return;
+  const id = achievement.id || slugify(achievement.title);
+  const ref = doc(db, "achievements", id);
+  await setDoc(
+    ref,
+    {
+      ...achievement,
+      id,
+      updatedAt: serverTimestamp(),
+      createdAt: achievement.createdAt || serverTimestamp(),
+    },
+    { merge: true }
+  );
+};
+
+export const deleteAchievementRemote = async (id) => {
+  if (!id) return;
+  await deleteDoc(doc(db, "achievements", id));
+};
+
 export const syncAllSeeds = async (seedData) => {
   const {
     projects = [],
@@ -347,6 +396,7 @@ export const syncAllSeeds = async (seedData) => {
     experienceRoadmap = [],
     studyRoadmap = [],
     skills = [],
+    achievements = [],
     settings,
   } = seedData || {};
 
@@ -363,6 +413,7 @@ export const syncAllSeeds = async (seedData) => {
             values.map((name) => ({ name, category }))
           )
     ),
-    syncSeedSettings(settings),
+    syncSeedAchievements(achievements),
+    settings ? syncSeedSettings(settings) : Promise.resolve(),
   ]);
 };

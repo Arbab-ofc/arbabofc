@@ -47,7 +47,7 @@ const Contact = () => {
               <div className="grid sm:grid-cols-2 gap-3 text-sm">
                 <div className="p-4 rounded-2xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5">
                   <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Email</p>
-                  <a className="text-slate-900 dark:text-white font-semibold" href="mailto:arbabprvt@gmail.com">
+                  <a className="text-slate-900 dark:text-white font-semibold hover:text-amber-700 dark:hover:text-amber-200" href="mailto:arbabprvt@gmail.com">
                     arbabprvt@gmail.com
                   </a>
                 </div>

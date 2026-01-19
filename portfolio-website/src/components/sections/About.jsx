@@ -6,6 +6,7 @@ import { Mail, MapPin, Phone, Award } from "lucide-react";
 const About = () => {
   const { settings, education } = useData();
   const currentEdu = education.find((item) => item.status === "current");
+  const cgpaValue = (settings.educationCgpa || "0").toString().replace(/cgpa[:\s]*/i, "").trim() || "0";
 
   return (
     <section id="about" className="section">
@@ -126,9 +127,9 @@ const About = () => {
                 </div>
               ))}
             </div>
-            {currentEdu && currentEdu.grade && (
+            {currentEdu && cgpaValue && (
               <div className="mt-4 p-3 rounded-2xl border text-sm bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-500/10 dark:text-blue-100 dark:border-blue-500/30">
-                Pursuing {currentEdu.degree} · CGPA {currentEdu.grade}
+                Pursuing {currentEdu.degree} · CGPA {cgpaValue}
               </div>
             )}
           </div>

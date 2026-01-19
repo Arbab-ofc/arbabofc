@@ -10,9 +10,11 @@ import { loginAdmin } from "../services/auth";
 import { ADMIN_EMAIL } from "../utils/constants";
 import toast from "react-hot-toast";
 import SEOHead from "../components/seo/SEOHead";
+import { useAuth } from "../contexts/AuthContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { resetPassword } = useAuth();
   const {
     register,
     handleSubmit,
@@ -26,6 +28,15 @@ const AdminLogin = () => {
       navigate("/admin");
     } catch (error) {
       toast.error("Unable to sign in. Check credentials.");
+    }
+  };
+
+  const handleReset = async () => {
+    try {
+      await resetPassword(ADMIN_EMAIL);
+      toast.success("Password reset email sent.");
+    } catch (error) {
+      toast.error("Unable to send reset email. Try again.");
     }
   };
 
@@ -76,14 +87,14 @@ const AdminLogin = () => {
                 <Input
                   placeholder="Email"
                   type="email"
-                  className="bg-white/80 text-slate-900 border-black/10 placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500/30"
+                  className="bg-white/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border-black/10 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500/30"
                   {...register("email")}
                   error={errors.email}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
-                  className="bg-white/80 text-slate-900 border-black/10 placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500/30"
+                  className="bg-white/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border-black/10 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500/30"
                   {...register("password")}
                   error={errors.password}
                 />
@@ -91,6 +102,13 @@ const AdminLogin = () => {
                   {isSubmitting ? "Signing in..." : "Sign in"}
                 </Button>
               </form>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200"
+              >
+                Forgot password? Send reset link
+              </button>
               <p className="text-xs text-gray-600 dark:text-gray-400">If you are not {ADMIN_EMAIL}, you cannot access this dashboard.</p>
             </div>
           </div>

@@ -14,7 +14,12 @@ import {
   fetchBlogs,
   fetchSettings,
   fetchContactMessages,
+  softDeleteContactMessage,
+  fetchExperiences,
+  fetchEducationEntries,
+  fetchAchievements,
   syncAllSeeds,
+  syncSeedAchievements,
   upsertProjectRemote,
   deleteProjectRemote,
   unlikeProjectRemote,
@@ -28,12 +33,14 @@ import {
   fetchStudyRoadmap,
   upsertStudyRoadmapRemote,
   deleteStudyRoadmapRemote,
+  upsertAchievementRemote,
+  deleteAchievementRemote,
 } from "../services/firestore";
 import { slugify } from "../utils/helpers";
 import { auth } from "../services/firebase";
 import { signInAnonymously, signInWithEmailAndPassword } from "firebase/auth";
 import { adminEmail } from "../config/firebase";
-import { logError, logInfo } from "../services/logger";
+import { createSpan, logError, logInfo } from "../services/logger";
 
 const DataContext = createContext();
 
@@ -48,12 +55,14 @@ export const DataProvider = ({ children }) => {
   const [blogList, setBlogList] = useState([]);
   const [experienceList, setExperienceList] = useState(experiences);
   const [educationList, setEducationList] = useState(education);
+  const [achievementList, setAchievementList] = useState(achievements);
   const [siteSettings, setSiteSettings] = useState(settings);
   const [likes, setLikes] = useState({});
   const [contactMessages, setContactMessages] = useState([]);
   const [remoteEmpty, setRemoteEmpty] = useState(false);
   const [seeded, setSeeded] = useState(false);
   const [studyRoadmap, setStudyRoadmap] = useState(studyRoadmapSeed);
+  const [achievementSynced, setAchievementSynced] = useState(false);
   const EXPERIENCE_STORAGE_KEY = "experience-summary";
   const STUDY_ROADMAP_STORAGE_KEY = "study-roadmap-cache";
   const normalizeRoadmapItem = (item = {}) => {
@@ -170,6 +179,36 @@ export const DataProvider = ({ children }) => {
           }
         }
 
+        // fetch experiences
+        try {
+          const remoteExperiences = await fetchExperiences();
+          if (remoteExperiences?.length) {
+            setExperienceList(remoteExperiences);
+          }
+        } catch (expErr) {
+          console.warn("Fetch experiences failed", expErr);
+        }
+
+        // fetch education
+        try {
+          const remoteEducation = await fetchEducationEntries();
+          if (remoteEducation?.length) {
+            setEducationList(remoteEducation);
+          }
+        } catch (eduErr) {
+          console.warn("Fetch education failed", eduErr);
+        }
+
+        // fetch achievements (admin sync happens in separate effect)
+        try {
+          const remoteAchievements = await fetchAchievements();
+          if (remoteAchievements?.length) {
+            setAchievementList(remoteAchievements);
+          }
+        } catch (achErr) {
+          console.warn("Fetch achievements failed", achErr);
+        }
+
         // fetch blogs
         try {
           const remoteBlogs = await fetchBlogs();
@@ -227,6 +266,33 @@ export const DataProvider = ({ children }) => {
     };
   }, []);
 
+  // ensure achievements are seeded after admin auth is ready
+  useEffect(() => {
+    if (!isAdmin || achievementSynced) return;
+    let active = true;
+    const syncAchievements = async () => {
+      try {
+        const remoteAchievements = await fetchAchievements();
+        if (!active) return;
+        if (!remoteAchievements?.length || remoteAchievements.length < achievements.length) {
+          await syncSeedAchievements(achievements);
+          const seededAchievements = await fetchAchievements();
+          if (!active) return;
+          if (seededAchievements?.length) {
+            setAchievementList(seededAchievements);
+          }
+        }
+        setAchievementSynced(true);
+      } catch (err) {
+        console.warn("Achievement sync failed", err);
+      }
+    };
+    syncAchievements();
+    return () => {
+      active = false;
+    };
+  }, [isAdmin, achievementSynced]);
+
   // no-op seeding effect kept for future admin-only seeding logic
   useEffect(() => {}, []);
 
@@ -266,8 +332,9 @@ export const DataProvider = ({ children }) => {
 
     if (uid && docId) {
       try {
+        const span = createSpan("likeProject: remote sync", { title, docId, uid });
         await likeProjectRemote(docId, uid);
-        logInfo("likeProject: remote synced", { title, docId, uid });
+        span.end();
       } catch (err) {
         console.warn("Failed to sync like to Firestore", err);
         logError("likeProject: remote sync failed", { title, docId, uid, error: err?.message });
@@ -302,8 +369,9 @@ export const DataProvider = ({ children }) => {
 
     if (uid && docId) {
       try {
+        const span = createSpan("unlikeProject: remote sync", { title, docId, uid });
         await unlikeProjectRemote(docId, uid);
-        logInfo("unlikeProject: remote synced", { title, docId, uid });
+        span.end();
       } catch (err) {
         console.warn("Failed to sync unlike to Firestore", err);
         logError("unlikeProject: remote sync failed", { title, docId, uid, error: err?.message });
@@ -568,6 +636,72 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const deleteContactMessage = async (id) => {
+    if (!id) return;
+    setContactMessages((prev) => prev.filter((msg) => msg.id !== id));
+    if (isAdmin) {
+      try {
+        await softDeleteContactMessage(id);
+        const messages = await fetchContactMessages();
+        if (Array.isArray(messages)) {
+          setContactMessages(messages);
+        }
+      } catch (err) {
+        console.warn("Unable to delete contact message", err);
+      }
+    }
+  };
+
+  // Achievement CRUD
+  const addAchievement = async (payload) => {
+    const id = payload.id || slugify(payload.title || "");
+    const entry = { ...payload, id };
+    setAchievementList((prev) => [...prev, entry]);
+    if (isAdmin) {
+      try {
+        await upsertAchievementRemote(entry);
+        const remoteAchievements = await fetchAchievements();
+        if (Array.isArray(remoteAchievements)) {
+          setAchievementList(remoteAchievements);
+        }
+      } catch (err) {
+        console.warn("Unable to save achievement", err);
+      }
+    }
+  };
+
+  const updateAchievement = async (payload) => {
+    const id = payload.id || slugify(payload.title || "");
+    const entry = { ...payload, id };
+    setAchievementList((prev) => prev.map((a) => (a.id === id ? entry : a)));
+    if (isAdmin) {
+      try {
+        await upsertAchievementRemote(entry);
+        const remoteAchievements = await fetchAchievements();
+        if (Array.isArray(remoteAchievements)) {
+          setAchievementList(remoteAchievements);
+        }
+      } catch (err) {
+        console.warn("Unable to update achievement", err);
+      }
+    }
+  };
+
+  const deleteAchievement = async (id) => {
+    setAchievementList((prev) => prev.filter((a) => a.id !== id));
+    if (isAdmin) {
+      try {
+        await deleteAchievementRemote(id);
+        const remoteAchievements = await fetchAchievements();
+        if (Array.isArray(remoteAchievements)) {
+          setAchievementList(remoteAchievements);
+        }
+      } catch (err) {
+        console.warn("Unable to delete achievement", err);
+      }
+    }
+  };
+
   const value = useMemo(
     () => ({
       projects: projectList,
@@ -577,7 +711,7 @@ export const DataProvider = ({ children }) => {
       contactMessages,
       experienceRoadmap,
       studyRoadmap,
-      achievements,
+      achievements: achievementList,
       settings: siteSettings,
       blogList,
       likes,
@@ -599,8 +733,12 @@ export const DataProvider = ({ children }) => {
       updateBlog,
       deleteBlog,
       updateSettings,
+      deleteContactMessage,
+      addAchievement,
+      updateAchievement,
+      deleteAchievement,
     }),
-    [projectList, blogList, likes, experienceList, educationList, studyRoadmap, siteSettings, contactMessages]
+    [projectList, blogList, likes, experienceList, educationList, studyRoadmap, siteSettings, contactMessages, achievementList]
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

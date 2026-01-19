@@ -44,6 +44,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
     
     match /blogs/{blogId} {
       allow read: if true;
@@ -89,6 +94,7 @@ service cloud.firestore {
     match /contactMessages/{messageId} {
       allow read: if isAdmin();
       allow create: if true; // accept from all visitors
+      allow update: if isAdmin();
     }
   }
 }

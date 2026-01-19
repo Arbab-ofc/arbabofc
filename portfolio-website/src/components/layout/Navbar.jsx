@@ -98,8 +98,12 @@ const Navbar = () => {
               className="fixed inset-0 z-50 flex items-end justify-center pb-6 px-4 pointer-events-auto"
               role="dialog"
               aria-modal="true"
+              onClick={closeMenu}
             >
-              <div className="w-full max-w-5xl rounded-[32px] border border-black/5 dark:border-white/12 bg-white/94 dark:bg-[#0b1022]/94 backdrop-blur-xl shadow-[0_32px_90px_rgba(0,0,0,0.35)] p-5 sm:p-6">
+              <div
+                className="w-full max-w-5xl rounded-[32px] border border-black/5 dark:border-white/12 bg-white/94 dark:bg-[#0b1022]/94 backdrop-blur-xl shadow-[0_32px_90px_rgba(0,0,0,0.35)] p-5 sm:p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className="flex items-center justify-between gap-4 pb-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-11 w-11 rounded-full border border-black/10 dark:border-white/15 bg-white/90 dark:bg-white/10 shadow-[0_10px_28px_rgba(0,0,0,0.2)] overflow-hidden">
@@ -172,41 +176,57 @@ const Navbar = () => {
 
       <AnimatePresence>
         {open && !isDesktop && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-auto bg-white/92 dark:bg-[#0b0f1c]/94 border-t border-black/10 dark:border-white/10 px-3 pb-3 shadow-xl overflow-hidden lg:hidden"
-          >
-            <div className="flex flex-col gap-2 text-sm pt-2">
-              <div className="grid grid-cols-2 gap-2">
-                {links.map((link, idx) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.04 }}
-                    className="py-2.5 rounded-xl px-3 border border-black/5 dark:border-white/5 hover:border-amber-400/50 bg-white/80 dark:bg-white/5 shadow-sm text-slate-800 dark:text-white"
-                    onClick={closeMenu}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+          <>
+            <motion.div
+              className="fixed inset-0 bg-slate-900/25 backdrop-blur-[2px] z-40 lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={closeMenu}
+            />
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pointer-events-auto bg-gradient-to-b from-white via-white to-slate-50/90 dark:from-[#0b1022] dark:via-[#0b1022] dark:to-[#0a0f1f] border-t border-black/10 dark:border-white/10 px-3 pb-3 shadow-[0_24px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl overflow-hidden lg:hidden relative z-50"
+            >
+              <div className="flex flex-col gap-2 text-sm pt-2">
+                <div className="grid grid-cols-2 gap-2">
+                  {links.map((link, idx) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.04 }}
+                      className="py-2.5 rounded-xl px-3 border border-black/5 dark:border-white/5 hover:border-amber-400/50 bg-white/80 dark:bg-white/5 shadow-sm text-slate-800 dark:text-white"
+                      onClick={closeMenu}
+                    >
+                      {link.label}
+                    </motion.a>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 gap-2 relative overflow-hidden isolate px-4 py-2 text-slate-950 dark:text-white bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300 shadow-[0_14px_36px_rgba(0,0,0,0.24)] border border-amber-300/70 dark:border-amber-300/40 hover:translate-y-[-2px] active:scale-[0.98] focus-visible:outline-amber-400 after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.35),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.22),transparent_42%)] after:-z-10 after:opacity-90 w-full sm:w-auto"
+                      onClick={closeMenu}
+                    >
+                      Admin Portal
+                    </Link>
+                  )}
+                  {user && !user.isAnonymous && (
+                    <Button variant="ghost" className="!px-3 !py-2 text-sm w-full sm:w-auto" onClick={logout}>
+                      Logout
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {user && !user.isAnonymous && (
-                  <Button variant="ghost" className="!px-3 !py-2 text-sm w-full sm:w-auto" onClick={logout}>
-                    Logout
-                  </Button>
-                )}
-                <Button as="a" href="/#contact" variant="primary" className="!px-4 !py-2 text-sm w-full sm:w-auto">
-                  Contact
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

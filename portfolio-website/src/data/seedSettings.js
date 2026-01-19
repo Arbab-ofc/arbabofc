@@ -35,6 +35,7 @@ export const settings = {
     months: 0,
     label: "Experience",
   },
+  internshipsCount: 0,
   adminEmail: "arbabprvt@gmail.com",
   maintenanceMode: false,
 };
