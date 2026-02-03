@@ -41,6 +41,7 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "vite": "^5.0.8",
-    "vite-plugin-pwa": "^0.17.4"
+    "vite-plugin-pwa": "^0.17.4",
+    "yaml": "^2.8.2"
   }
 }
