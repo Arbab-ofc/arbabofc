@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Rocket } from "lucide-react";
 import { Button } from "../common/Button";
 import { useData } from "../../contexts/DataContext";
-import resumePdf from "../../assets/Arbab-ofc (1).pdf";
+import resumePdf from "../../assets/arbabofcme.pdf";
 
 const formatExperienceDisplay = (summary) => {
   if (!summary) return { value: "--", label: "Experience" };
